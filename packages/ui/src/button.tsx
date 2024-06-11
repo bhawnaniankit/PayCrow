@@ -1,20 +1,17 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, forwardRef } from "react";
 
 interface ButtonProps {
-  children: ReactNode;
-  className?: string;
-  appName: string;
+  children: ReactNode,
+  onclick: () => void
 }
 
-export const Button = ({ children, className, appName }: ButtonProps) => {
+export const Button = forwardRef(({ children, onclick }: ButtonProps) => {
   return (
-    <button
-      className={className}
-      onClick={() => alert(`Hello from your ${appName} app!`)}
-    >
+    <button className=" bg-slate-800, p-2 rounded" onClick={onclick}>
       {children}
     </button>
-  );
-};
+  )
+}
+);
