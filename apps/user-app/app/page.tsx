@@ -7,7 +7,7 @@ export default function() {
   const session= useSession();
 
   return <div>
-    {JSON.stringify(session)}
+    {/* {JSON.stringify(session)} */}
     <Appbar user={session.data?.user} onSignin={signIn} onSignout={signOut}></Appbar>
   </div>
 }

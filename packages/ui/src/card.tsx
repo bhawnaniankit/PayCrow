@@ -1,25 +1,10 @@
-export function Card({
-  className,
-  title,
-  children,
-  href,
-}: {
+export function Card({className,children}: {
   className?: string;
-  title: string;
   children: React.ReactNode;
-  href: string;
 }): JSX.Element {
   return (
-    <a
-      className={className}
-      href={`${href}?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2>
-        {title} <span>-&gt;</span>
-      </h2>
-      <p>{children}</p>
-    </a>
+    <div className={`border card border-gray-300 hover:bg-slate-50 rounded-md ${className}`}>
+      {children}
+    </div>
   );
 }

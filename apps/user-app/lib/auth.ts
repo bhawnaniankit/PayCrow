@@ -22,6 +22,8 @@ export const authOptions = {
 
             if (existingUser) {
                 const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
+                console.log(passwordValidation);
+                
                 if (passwordValidation) {
                     return {
                         id: existingUser.id.toString(),

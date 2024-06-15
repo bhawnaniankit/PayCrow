@@ -4,12 +4,12 @@ import { ReactNode, forwardRef } from "react";
 
 interface ButtonProps {
   children: ReactNode,
-  onclick: () => void
+  onclick: (e:any) => void
 }
 
 export const Button = forwardRef(({ children, onclick }: ButtonProps) => {
   return (
-    <button className=" bg-slate-800, p-2 rounded" onClick={onclick}>
+    <button className=" text-white bg-slate-800 px-2 py-1 rounded" onClick={onclick}>
       {children}
     </button>
   )

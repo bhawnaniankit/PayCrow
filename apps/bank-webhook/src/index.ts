@@ -10,8 +10,8 @@ app.post("/hdfcWebhook",async (req:Request,res:Response)=>{
         userId: req.body.user_identifier,
         amount: req.body.amount
     };
+        
     // Update balance in db, add txn
-
     db.$transaction([
         db.balance.update({
             where:{
