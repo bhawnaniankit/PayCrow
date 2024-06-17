@@ -3,7 +3,6 @@ import db from "../db/index";
 import { signUpSchema, signUpType } from "../common/schema";
 import bcrypt from "bcrypt";
 
-
 export const signUpUser = async (userData:signUpType)=>{
     const parsedData = await signUpSchema.safeParse(userData) ;
     if(!parsedData.success){
@@ -22,16 +21,29 @@ export const signUpUser = async (userData:signUpType)=>{
             }
         })
 
-        console.log(user);
-        
         return {
             error:false,
             msg:"User Created"
         }
     }
-    catch(e){
+    catch(e:any){
+
+        if(e.code=="P1001"){
+            return {
+                error:true,
+                msg:"Datebase Down"
+            }
+        }
+                    
+        if(e.code=="P2002"){
+            return {
+                error:true,
+                msg:`${e.meta.target[0]} already exists`
+            }
+        }
+
         return {
-            error:true,
+            error:true, 
             msg:"Internal Sever Error"
         }
     }

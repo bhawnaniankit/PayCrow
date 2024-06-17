@@ -3,7 +3,7 @@ export function Card({className,children}: {
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <div className={`border card border-gray-300 hover:bg-slate-50 rounded-md ${className}`}>
+    <div className={`md:border md:shadow md:border-gray-300 md:hover:bg-slate-50 rounded-md ${className}`}>
       {children}
     </div>
   );

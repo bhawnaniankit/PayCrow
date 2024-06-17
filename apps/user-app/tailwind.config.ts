@@ -12,6 +12,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        paytmBlue:"#4DA7F8"
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)"],

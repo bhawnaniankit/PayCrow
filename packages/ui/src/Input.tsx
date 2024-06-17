@@ -1,17 +1,16 @@
-import {  FieldValues, UseFormRegister } from "react-hook-form"
 
 interface InputLabelProps{
-  label:string,
   placeholder:string,
   type:string,
   className?:string,
+  require?:boolean,
   onchange?:(e:React.ChangeEvent<HTMLInputElement>)=>void
 }
 
-export const Input = ({label,placeholder,type,className,onchange}:InputLabelProps):JSX.Element => {
+export const Input = ({placeholder,type,className,require,onchange}:InputLabelProps):JSX.Element => {
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      <input className="outline-none" onChange={onchange} type={type} placeholder={placeholder}/>
+    <div className={` bg-white shadow flex flex-col gap-1 ${className}`}>
+      <input className=" bg-inherit outline-none" onChange={onchange} type={type} placeholder={placeholder}/>
     </div>
   )
 }

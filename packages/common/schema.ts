@@ -1,8 +1,9 @@
 import { number, z } from "zod";
 
 export const siginSchema=z.object({
-    csrfToken:z.string(),
-    phone:z.string().length(10),
+    phone:z.string().length(10,{
+        message:"Invalid Number"
+    }),
     password:z.string()
 })
 

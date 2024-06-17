@@ -9,14 +9,15 @@ import { Label } from "./Label"
 import { signIn } from 'next-auth/react';
 import { toast } from "sonner"
 import {useRouter} from "next/navigation";
+import { siginSchema, siginType} from "@repo/common/schema"
 
 const Signin = ():JSX.Element => {
   const [passwordVisible,setPasswordVisible]=useState<boolean>(false);
-  const router=useRouter()
   const [isRequiredError,setRequiredError]=useState({
     phoneReq:false,
     passwordReq:false
   })
+  const router=useRouter()
   const phone=useRef("");
   const password=useRef("");
 
@@ -27,10 +28,27 @@ const Signin = ():JSX.Element => {
 
     if(!phone.current || !password.current){
       setRequiredError({
-        phoneReq:phone.current ? true : false,
-        passwordReq:password.current ? true : false
+        phoneReq:phone.current ? false : true,
+        passwordReq:password.current ? false : true
       })
       return;
+    }
+    
+    const toastMsg=toast.loading("Signning in...",{
+      duration:5000
+    });
+
+    const data:siginType={
+      phone:phone.current,
+      password:password.current
+    }
+
+    const parsedData=await siginSchema.safeParse(data);
+
+    if(!parsedData.success){
+      return toast.error(parsedData.error.errors[0]?.message,{
+        id:toastMsg
+      })
     }
     
     const res=await signIn('credentials',{
@@ -49,27 +67,33 @@ const Signin = ():JSX.Element => {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <Card className=" w-[27%] p-16">
+      <Card className=" md:min-w-[27%] p-16">
         <div className=" text-3xl text-indigo-950 text-center font font-bold">PayTm</div>
         <div className=" text-xl  text-center my-4">Log In</div>
-        <form className="flex flex-col">
+        <form className=" flex flex-col">
           <Label 
             lable="Contact" 
             className=" mb-1"
           />
           <Input 
             className=" border px-2 py-1 rounded-md" 
-            label="Contact Number" 
             placeholder="Enter Contact Number" 
             type="tel"
             onchange={(e)=>{
+              setRequiredError((p)=>({
+                ...p,
+                phoneReq:false
+              }))
               phone.current=e.target.value
             }}
           />
+          {
+            isRequiredError.phoneReq && <span className=" text-red-400">Contact Number is Required</span>
+          }
           <Label lable="Password" className="mt-2 mb-1"/>
-          <div className="flex border px-2 py-1 mb-6 rounded-md items-center">
+          <div className=" shadow bg-white flex border justify-between px-2 py-1 rounded-md items-center">
             <Input
-              label="Password" 
+              className=" shadow-none"
               placeholder="••••••••" 
               type={ passwordVisible?"text":"password"}
               onchange={(e)=>{
@@ -80,10 +104,13 @@ const Signin = ():JSX.Element => {
               onClick={(e)=>{
                 e.preventDefault()
                 setPasswordVisible(!passwordVisible)
-              }}>{passwordVisible?<FaEyeSlash/>:<FaEye/>}
+              }}>{passwordVisible?<FaEye/>:<FaEyeSlash/>}
             </button>
           </div>
-          <Button onclick={handleSubmit}>Sign In</Button>
+          {
+            isRequiredError.passwordReq && <span className=" text-red-400">Password is required</span>
+          }
+          <Button className="mt-6" onclick={handleSubmit}>Sign In</Button>
         </form>
       </Card>
     </div>

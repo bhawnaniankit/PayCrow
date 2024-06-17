@@ -7,16 +7,28 @@ import { Button } from "./button"
 import {  useRef, useState } from "react"
 import { Label } from "./Label"
 import { toast } from "sonner"
-import Router from "next/router";
 import {signUpUser} from "@repo/actions/signUp"
+import { Roboto } from 'next/font/google'
+import { useRouter } from "next/navigation"
+import { signUpSchema } from "@repo/common/schema"
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 //todo - set a return type
 const SignUp = ():JSX.Element => {
   const [passwordVisible,setPasswordVisible]=useState<boolean>(false);
-  // const [isRequiredError,setRequiredError]=useState({
-  //   phoneReq:false,
-  //   passwordReq:false
-  // })
+  const [isRequiredError,setRequiredError]=useState({
+    nameReq:false,
+    phoneReq:false,
+    emailReq:false,
+    passwordReq:false
+  })
+
+  const router=useRouter();
+
   const name=useRef("");
   const email=useRef("");
   const phone=useRef("");
@@ -27,74 +39,115 @@ const SignUp = ():JSX.Element => {
       e.preventDefault();
     }
 
-    // if(!phone.current || !password.current){
-    //   setRequiredError({
-    //     phoneReq:phone.current ? true : false,
-    //     passwordReq:password.current ? true : false
-    //   })
-    //   return;
-    // }
+    setPasswordVisible((p)=> false)
 
-    const res = await signUpUser({name:name.current,email:email.current,number:phone.current,password:password.current});
-    if(res.error){
-      return toast.error(`${res.msg}`);
+    if(!phone.current || !password.current || !name.current || !email.current){
+      setRequiredError({
+        nameReq:name.current ? false : true,
+        phoneReq:phone.current ? false : true,
+        emailReq:email.current ? false : true,
+        passwordReq:password.current ? false : true
+      })
+      return;
     }
 
-    toast.success(`${res.msg}`);
+    const toastMsg=toast.loading("Signing Up...");
+    const data={name:name.current,email:email.current,number:phone.current,password:password.current};
+
+    const parsedData = await signUpSchema.safeParse(data);
+    if(!parsedData.success){
+      toast.error(`${parsedData.error.errors[0]?.message}`,{
+        id:toastMsg
+      })
+    }
+    const res = await signUpUser(data);
+    if(res.error){
+      return toast.error(`${res.msg}`,{
+        id:toastMsg
+      });
+    }
+
+    toast.success(`${res.msg}`,{
+      id:toastMsg
+    }); 
+
+    router.push("/");
   }
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <Card className=" w-[27%] p-16">
-        <div className=" text-3xl text-indigo-950 text-center font font-bold">PayTm</div>
+    <div className={` ${roboto.className} font-bold h-screen flex justify-center items-center`}>
+      <Card className=" md:min-w-[30%] p-16">
+        <div className=" text-4xl text-indigo-950 text-center font font-bold">PayTm</div>
         <div className=" text-xl  text-center my-4">Sign Up</div>
         <form className="flex flex-col">
-        <Label 
+          <Label 
             lable="Name" 
             className=" mb-1"
           />
           <Input 
             className=" border px-2 py-1 rounded-md" 
-            label="Contact Number" 
             placeholder="Full Name" 
-            type="tel"
+            type="text"
             onchange={(e)=>{
+              setRequiredError((pervState)=>({
+                ...pervState,
+                nameReq:false
+              }))
               name.current=e.target.value
             }}
           />
+          {
+            isRequiredError.nameReq && <span className=" text-red-400">Name is Required</span>
+          }
           <Label 
             lable="Email" 
             className=" mb-1 mt-2"
           />
           <Input 
             className=" border px-2 py-1 rounded-md" 
-            label="Contact Number" 
             placeholder="Email" 
             type="tel"
             onchange={(e)=>{
+              setRequiredError((pervState)=>({
+                ...pervState,
+                emailReq:false
+              }))
               email.current=e.target.value
             }}
           />
+          {
+            isRequiredError.emailReq && <span className=" text-red-400">Email is Required</span>
+          }
           <Label 
             lable="Contact" 
             className=" mb-1 mt-2"
           />
           <Input 
             className=" border px-2 py-1 rounded-md" 
-            label="Contact Number" 
-            placeholder="Enter Contact Number" 
+            placeholder="Contact Number" 
             type="tel"
             onchange={(e)=>{
+              setRequiredError((pervState)=>({
+                ...pervState,
+                phoneReq:false
+              }))
               phone.current=e.target.value
             }}
-          />
+          />{
+            isRequiredError.phoneReq && <span className=" text-red-400">Contact is Required</span>
+          }
+
           <Label lable="Password" className="mt-2 mb-1"/>
-          <div className="flex border px-2 py-1 mb-6 rounded-md items-center">
+          <div className="flex border bg-white px-2 py-1 justify-between shadow rounded-md items-center">
             <Input
-              label="Password" 
+              className="shadow-none"
               placeholder="••••••••" 
               type={ passwordVisible?"text":"password"}
               onchange={(e)=>{
+                setRequiredError((pervState)=>({
+                  ...pervState,
+                  passwordReq:false
+                }))
                 password.current=e.target.value
               }}
             />
@@ -102,10 +155,13 @@ const SignUp = ():JSX.Element => {
               onClick={(e)=>{
                 e.preventDefault()
                 setPasswordVisible(!passwordVisible)
-              }}>{passwordVisible?<FaEyeSlash/>:<FaEye/>}
+              }}>{passwordVisible?<FaEye/>:<FaEyeSlash/>}
             </button>
           </div>
-          <Button onclick={handleSubmit}>Sign In</Button>
+            {
+              isRequiredError.passwordReq && <span className=" text-red-400">Password is Required</span>
+            }
+          <Button className=" mt-6" onclick={handleSubmit}>Sign Up</Button>
         </form>
       </Card>
     </div>
