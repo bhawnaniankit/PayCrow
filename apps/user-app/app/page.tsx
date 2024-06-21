@@ -1,15 +1,13 @@
 "use client";
-import {Appbar} from "@repo/ui/AppBar"
+import {NavBar} from "@repo/ui/NavBar"
 import { useSession } from "next-auth/react"
-import { signIn,signOut } from "next-auth/react";
-
 import { useScroll, useTransform } from "framer-motion";
 import React from "react";
 import { GoogleGeminiEffect } from "../components/google-gemini-effect";
 
 export default function() {
+  // console.log("Home");
   const session= useSession();
-
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -22,33 +20,39 @@ export default function() {
   const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
   const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
+  console.log(session);
+  
   if(session.data?.user){
-       return <div>
-        {JSON.stringify(session)}
-        <Appbar user={session.data?.user} onSignin={signIn} onSignout={signOut}></Appbar>
-        </div>
-       }
+    
+    return <div>
+    {/* {JSON.stringify(session)} */}
+      <div>
+        rjejrhwejh
+      </div>
+    </div>
+  }
+  else{
 
   return (<>
-    <Appbar className=" bg-black border-none" user={session.data?.user} onSignin={signIn} onSignout={signOut}></Appbar>
-    <div
-      className="h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] relative pt-40 overflow-clip"
-      ref={ref}
-    >
-      <GoogleGeminiEffect
-        title="Paytm karo"
-        description="Paytm is your one-stop solution for all your daily payment needs"
-        pathLengths={[
-          pathLengthFirst,
-          pathLengthSecond,
-          pathLengthThird,
-          pathLengthFourth,
-          pathLengthFifth,
-        ]}
-      />
+            <div
+              className="h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] relative pt-40 overflow-clip"
+              ref={ref}
+            >
+              <GoogleGeminiEffect
+                title="PayCrow karo"
+                description=""
+                pathLengths={[
+                  pathLengthFirst,
+                  pathLengthSecond,
+                  pathLengthThird,
+                  pathLengthFourth,
+                  pathLengthFifth,
+                ]}
+              />
 
-    </div>
-    <div className=" h-screen">Hellloo</div>
-      </>
+            </div>
+            <div className=" h-screen">Hellloo</div>
+         </>
   );
+}
 }

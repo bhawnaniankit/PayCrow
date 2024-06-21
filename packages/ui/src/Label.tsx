@@ -5,6 +5,6 @@ interface LabelProps{
 
 export const Label = ({lable,className}:LabelProps) => {
   return (
-    <label className={`text-lg bold ${className}`}>{lable}</label>
+    <label className={`text-md bold ${className}`}>{lable}</label>
   )
 }

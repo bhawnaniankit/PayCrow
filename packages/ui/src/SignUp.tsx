@@ -11,6 +11,8 @@ import {signUpUser} from "@repo/actions/signUp"
 import { Roboto } from 'next/font/google'
 import { useRouter } from "next/navigation"
 import { signUpSchema } from "@repo/common/schema"
+import { GiEagleHead } from "react-icons/gi"
+import Link from "next/link"
 
 const roboto = Roboto({
   weight: '400',
@@ -75,10 +77,10 @@ const SignUp = ():JSX.Element => {
   }
 
   return (
-    <div className={` ${roboto.className} font-bold h-screen flex justify-center items-center`}>
-      <Card className=" md:min-w-[30%] p-16">
-        <div className=" text-4xl text-indigo-950 text-center font font-bold">PayTm</div>
-        <div className=" text-xl  text-center my-4">Sign Up</div>
+    <div className={` ${roboto.className} text-black font-bold bg-opacity-90 h-screen flex justify-center items-center`}>
+      <Card className=" text-sm md:min-w-[80%] p-12 md:p-16 lg:m-20">
+        <div className=" text-4xl text-black text-center flex justify-center font font-bold"> <GiEagleHead />ayCrow</div>
+        <div className=" text-xl font-semibold text-center my-4">Sign Up</div>
         <form className="flex flex-col">
           <Label 
             lable="Name" 
@@ -161,7 +163,8 @@ const SignUp = ():JSX.Element => {
             {
               isRequiredError.passwordReq && <span className=" text-red-400">Password is Required</span>
             }
-          <Button className=" mt-6" onclick={handleSubmit}>Sign Up</Button>
+            <Link href={"/signin"} className="mt-1">Already have an account?</Link>
+          <Button className=" mt-4" onclick={handleSubmit}>Sign Up</Button>
         </form>
       </Card>
     </div>

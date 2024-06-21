@@ -10,6 +10,15 @@ import { signIn } from 'next-auth/react';
 import { toast } from "sonner"
 import {useRouter} from "next/navigation";
 import { siginSchema, siginType} from "@repo/common/schema"
+import { GiEagleHead } from "react-icons/gi";
+import Link from 'next/link'
+import { Roboto } from 'next/font/google'
+
+
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 const Signin = ():JSX.Element => {
   const [passwordVisible,setPasswordVisible]=useState<boolean>(false);
@@ -58,6 +67,8 @@ const Signin = ():JSX.Element => {
     })
     
     if(res?.error){      
+      console.log(res.error);
+      
       return toast.error("Some error occcured!");
     }
 
@@ -66,10 +77,10 @@ const Signin = ():JSX.Element => {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <Card className=" md:min-w-[27%] p-16">
-        <div className=" text-3xl text-indigo-950 text-center font font-bold">PayTm</div>
-        <div className=" text-xl  text-center my-4">Log In</div>
+    <div className= {` ${roboto.className} h-screen text-black flex justify-center items-center`}>
+      <Card className=" bg-opacity-90  md:min-w-[27%] p-12 md:p-16 lg:p-20">
+        <div className=" text-3xl text-black text-center flex justify-center font font-bold"> <GiEagleHead />ayCrow</div>
+        <div className=" text-xl  text-center font-semibold my-4">Log In</div>
         <form className=" flex flex-col">
           <Label 
             lable="Contact" 
@@ -110,7 +121,8 @@ const Signin = ():JSX.Element => {
           {
             isRequiredError.passwordReq && <span className=" text-red-400">Password is required</span>
           }
-          <Button className="mt-6" onclick={handleSubmit}>Sign In</Button>
+          <Link href={"/signup"} className=" mt-1">Don't have an account?</Link>
+          <Button className=" mt-4" onclick={handleSubmit}>Sign In</Button>
         </form>
       </Card>
     </div>

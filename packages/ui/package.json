@@ -7,9 +7,10 @@
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
     "./SignUp": "./src/SignUp.tsx",
-    "./AppBar": "./src/Appbar.tsx",
+    "./NavBar": "./src/NavBar.tsx",
     "./Signin": "./src/Signin.tsx",
-    "./ScrollEffect":"./src/landing/ScrollEffect.tsx"
+    "./sqBackground":"./src/landing/SqBackground.tsx",
+    "./AppBar":"./src/transfer/AppBar.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
